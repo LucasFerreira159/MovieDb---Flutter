@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_movie/lista_filmes/widgets/movie_cell.dart';
+import 'package:flutter_movie/movie_detail/movie_detail.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'movie_cell.dart';
-import 'movie_title.dart';
+import 'widgets/movie_title.dart';
 
 class MovieList extends StatefulWidget {
   @override
@@ -54,7 +55,12 @@ class _MovieListState extends State<MovieList> {
                 return FlatButton(
                   child: MovieCell(movies, i),
                   padding: EdgeInsets.all(0.0),
-                  color: Colors.white,
+                  color: Colors.black45,
+                  onPressed: (){
+                    Navigator.push(context, new MaterialPageRoute(builder: (context){
+                      return new MovieDetail(movies[i]);
+                    }));
+                  },
                 );
               },
             ))
