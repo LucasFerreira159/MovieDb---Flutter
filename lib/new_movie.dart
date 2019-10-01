@@ -17,7 +17,7 @@ class _NewMovieState extends State<NewMovie> {
     final imageButton = Material(
         elevation: 5.0,
         shape: CircleBorder(),
-        color: Colors.transparent,
+        color: Colors.white,
         child: InkWell(
           child: IconButton(
             icon: Icon(Icons.camera_alt),
@@ -39,6 +39,8 @@ class _NewMovieState extends State<NewMovie> {
         return null;
       },
       decoration: InputDecoration(
+        fillColor: Colors.white,
+        filled: true,
           contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
           hintText: 'Nome',
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0))),
@@ -48,6 +50,8 @@ class _NewMovieState extends State<NewMovie> {
       controller: _movieScoreController,
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
+        fillColor: Colors.white,
+        filled: true,
           contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
           hintText: 'Nota',
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0))),
@@ -57,6 +61,8 @@ class _NewMovieState extends State<NewMovie> {
       controller: _movieYearController,
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
+        fillColor: Colors.white,
+        filled: true,
           contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
           hintText: 'Ano',
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0))),
@@ -67,6 +73,8 @@ class _NewMovieState extends State<NewMovie> {
       keyboardType: TextInputType.multiline,
       maxLines: 10,
       decoration: InputDecoration(
+        fillColor: Colors.white,
+        filled: true,
         hintText: 'Descrição',
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(5.0),
@@ -87,7 +95,7 @@ class _NewMovieState extends State<NewMovie> {
             // Add to list
           }
         },
-        child: Text('Entrar',
+        child: Text('Adicionar novo filme',
             textAlign: TextAlign.center,
             style: TextStyle(fontFamily: 'Montserrat', fontSize: 20.0)
                 .copyWith(color: Colors.white, fontWeight: FontWeight.bold)),
@@ -95,44 +103,56 @@ class _NewMovieState extends State<NewMovie> {
     );
 
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(
+        elevation: 0.3,
         centerTitle: true,
-        title: Text('Novo Filme'),
+        title: Text(
+          'Novo filme',
+          style: new TextStyle(
+              color: Colors.red,
+              fontFamily: 'Arvo',
+              fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.black87,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          color: Colors.red,
+          onPressed: () => Navigator.of(context).pop(),
+        ),
       ),
-      body: ListView(
-        children: <Widget>[
-          Form(
-            key: _formKey,
-            child: Padding(
-              padding: EdgeInsets.all(20),
-              child: Column(
-                children: <Widget>[
-                  imageButton,
-                  SizedBox(
-                    height: 25.0,
-                  ),
-                  movieNameField,
-                  SizedBox(
-                    height: 25.0,
-                  ),
-                  movieYearField,
-                  SizedBox(
-                    height: 25.0,
-                  ),
-                  movieScoreField,
-                  SizedBox(
-                    height: 25.0,
-                  ),
-                  movieDescriptionField,
-                  SizedBox(
-                    height: 25.0,
-                  ),
-                  addButton,
-                ],
-              ),
+      body: SingleChildScrollView(
+        child: Form(
+          key: _formKey,
+          child: Padding(
+            padding: EdgeInsets.all(20),
+            child: Column(
+              children: <Widget>[
+                imageButton,
+                SizedBox(
+                  height: 25.0,
+                ),
+                movieNameField,
+                SizedBox(
+                  height: 25.0,
+                ),
+                movieYearField,
+                SizedBox(
+                  height: 25.0,
+                ),
+                movieScoreField,
+                SizedBox(
+                  height: 25.0,
+                ),
+                movieDescriptionField,
+                SizedBox(
+                  height: 25.0,
+                ),
+                addButton,
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }

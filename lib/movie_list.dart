@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_movie/movie.dart';
+import 'package:flutter_movie/new_movie.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -11,7 +13,7 @@ class MovieList extends StatefulWidget {
 }
 
 class _MovieListState extends State<MovieList> {
-  var movies;
+  List<Movie> movies;
   Color mainColor = Colors.red;
 
   @override
@@ -60,6 +62,15 @@ class _MovieListState extends State<MovieList> {
             ))
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => NewMovie()),
+          );
+        },
       ),
     );
   }
