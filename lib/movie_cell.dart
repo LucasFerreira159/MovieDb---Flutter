@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'movies.dart';
+
 class MovieCell extends StatelessWidget {
-  final movies;
+  List<Movie> movies;
   final i;
   Color mainColor = Colors.white;
   var img_url = 'https://image.tmdb.org/t/p/w500/';
@@ -26,7 +28,7 @@ class MovieCell extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                     color: Colors.grey,
                     image: DecorationImage(
-                        image: NetworkImage(img_url + movies[i]['poster_path']),
+                        image: NetworkImage(img_url + movies[i].posterPath),
                         fit: BoxFit.cover),
                     /*boxShadow: [
                       new BoxShadow(
@@ -42,7 +44,7 @@ class MovieCell extends StatelessWidget {
               child: new Column(
                 children: [
                   new Text(
-                    movies[i]['title'],
+                    movies[i].title,
                     style: new TextStyle(
                         fontSize: 20.0,
                         fontFamily: 'Arvo',
@@ -51,7 +53,7 @@ class MovieCell extends StatelessWidget {
                   ),
                   new Padding(padding: const EdgeInsets.all(2.0)),
                   new Text(
-                    movies[i]['overview'],
+                    movies[i].overview,
                     maxLines: 3,
                     style: new TextStyle(
                         color: const Color(0xff8785A4), fontFamily: 'Arvo'),
