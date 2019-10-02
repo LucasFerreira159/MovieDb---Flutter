@@ -76,9 +76,9 @@ class _MovieListState extends State<MovieList> {
   }
 
   Future<Map> getJson() async {
-    var url =
+    String url =
         'http://api.themoviedb.org/3/discover/movie?api_key=3c6b7b5163f500336234a349b8b17a74&language=pt-BR';
-    http.Response response = await http.get(url);
+    var response = await http.get(url);
     return json.decode(response.body);
   }
 
