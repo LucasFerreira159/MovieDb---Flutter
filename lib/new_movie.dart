@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 
 class NewMovie extends StatefulWidget {
@@ -14,20 +16,33 @@ class _NewMovieState extends State<NewMovie> {
 
   @override
   Widget build(BuildContext context) {
-    final imageButton = Material(
-        elevation: 5.0,
-        shape: CircleBorder(),
-        color: Colors.white,
-        child: InkWell(
-          child: IconButton(
-            icon: Icon(Icons.camera_alt),
-            padding: EdgeInsets.all(50.0),
-            iconSize: 70,
-            onPressed: () {
-              // open galery
-            },
-          ),
-        ));
+    File _image;
+
+    Future getImage() async {
+        var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+        setState(() {
+          _image = image;
+        });
+    }
+
+    final imageButton = InkWell(
+        onTap: () => getImage(),
+        child: _image == null
+            ? Icon(
+                Icons.camera_alt,
+                size: 50,
+                color: Colors.white,
+              )
+            : Container(
+              width: 100,
+              height: 120,
+              child: Image.file(
+                _image,
+                fit: BoxFit.fill,
+              ),
+            ),
+      );
 
     final movieNameField = TextFormField(
       controller: _movieNameController,
@@ -39,8 +54,8 @@ class _NewMovieState extends State<NewMovie> {
         return null;
       },
       decoration: InputDecoration(
-        fillColor: Colors.white,
-        filled: true,
+          fillColor: Colors.white,
+          filled: true,
           contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
           hintText: 'Nome',
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0))),
@@ -50,8 +65,8 @@ class _NewMovieState extends State<NewMovie> {
       controller: _movieScoreController,
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
-        fillColor: Colors.white,
-        filled: true,
+          fillColor: Colors.white,
+          filled: true,
           contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
           hintText: 'Nota',
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0))),
@@ -61,8 +76,8 @@ class _NewMovieState extends State<NewMovie> {
       controller: _movieYearController,
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
-        fillColor: Colors.white,
-        filled: true,
+          fillColor: Colors.white,
+          filled: true,
           contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
           hintText: 'Ano',
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0))),
