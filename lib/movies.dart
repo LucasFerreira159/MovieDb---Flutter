@@ -1,12 +1,40 @@
 // To parse this JSON data, do
 //
-//     final movie = movieFromJson(jsonString);
+//     final movies = moviesFromJson(jsonString);
 
 import 'dart:convert';
 
-List<Movie> movieFromJson(String str) => List<Movie>.from(json.decode(str).map((x) => Movie.fromJson(x)));
+Movies moviesFromJson(String str) => Movies.fromJson(json.decode(str));
 
-String movieToJson(List<Movie> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String moviesToJson(Movies data) => json.encode(data.toJson());
+
+class Movies {
+    int page;
+    int totalResults;
+    int totalPages;
+    List<Movie> results;
+
+    Movies({
+        this.page,
+        this.totalResults,
+        this.totalPages,
+        this.results,
+    });
+
+    factory Movies.fromJson(Map<String, dynamic> json) => Movies(
+        page: json["page"],
+        totalResults: json["total_results"],
+        totalPages: json["total_pages"],
+        results: List<Movie>.from(json["results"].map((x) => Movie.fromJson(x))),
+    );
+
+    Map<String, dynamic> toJson() => {
+        "page": page,
+        "total_results": totalResults,
+        "total_pages": totalPages,
+        "results": List<dynamic>.from(results.map((x) => x.toJson())),
+    };
+}
 
 class Movie {
     double popularity;
@@ -16,7 +44,7 @@ class Movie {
     int id;
     bool adult;
     String backdropPath;
-    String originalLanguage;
+    OriginalLanguage originalLanguage;
     String originalTitle;
     List<int> genreIds;
     String title;
@@ -49,7 +77,7 @@ class Movie {
         id: json["id"],
         adult: json["adult"],
         backdropPath: json["backdrop_path"],
-        originalLanguage: json["original_language"],
+        originalLanguage: originalLanguageValues.map[json["original_language"]],
         originalTitle: json["original_title"],
         genreIds: List<int>.from(json["genre_ids"].map((x) => x)),
         title: json["title"],
@@ -66,7 +94,7 @@ class Movie {
         "id": id,
         "adult": adult,
         "backdrop_path": backdropPath,
-        "original_language": originalLanguage,
+        "original_language": originalLanguageValues.reverse[originalLanguage],
         "original_title": originalTitle,
         "genre_ids": List<dynamic>.from(genreIds.map((x) => x)),
         "title": title,
@@ -74,4 +102,25 @@ class Movie {
         "overview": overview,
         "release_date": "${releaseDate.year.toString().padLeft(4, '0')}-${releaseDate.month.toString().padLeft(2, '0')}-${releaseDate.day.toString().padLeft(2, '0')}",
     };
+}
+
+enum OriginalLanguage { EN, RU }
+
+final originalLanguageValues = EnumValues({
+    "en": OriginalLanguage.EN,
+    "ru": OriginalLanguage.RU
+});
+
+class EnumValues<T> {
+    Map<String, T> map;
+    Map<T, String> reverseMap;
+
+    EnumValues(this.map);
+
+    Map<T, String> get reverse {
+        if (reverseMap == null) {
+            reverseMap = map.map((k, v) => new MapEntry(v, k));
+        }
+        return reverseMap;
+    }
 }

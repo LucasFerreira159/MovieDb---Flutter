@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_movie/movie.dart';
 import 'package:flutter_movie/new_movie.dart';
 import 'dart:async';
-import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'movie_cell.dart';
 import 'movie_title.dart';
+import 'movies.dart';
 
 class MovieList extends StatefulWidget {
   @override
@@ -51,6 +50,7 @@ class _MovieListState extends State<MovieList> {
             MovieTitle(Colors.white),
             Expanded(
                 child: new ListView.builder(
+                  physics: BouncingScrollPhysics(),
               itemCount: movies == null ? 0 : movies.length,
               itemBuilder: (context, i) {
                 return FlatButton(
@@ -75,18 +75,18 @@ class _MovieListState extends State<MovieList> {
     );
   }
 
-  Future<Map> getJson() async {
+  Future getJson() async {
     String url =
-        'http://api.themoviedb.org/3/discover/movie?api_key=3c6b7b5163f500336234a349b8b17a74&language=pt-BR';
+        'http://api.themoviedb.org/3/discover/movie?api_key=3c6b7b5163f500336234a349b8b17a74&language=en-US';
     var response = await http.get(url);
-    return json.decode(response.body);
+    return moviesFromJson(response.body);
   }
 
   void getData() async {
-    var data = await getJson();
+    Movies data = await getJson();
 
     setState(() {
-      movies = data['results'];
+      movies = data.results;
     });
   }
 }
