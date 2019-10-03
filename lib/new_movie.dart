@@ -1,8 +1,10 @@
 import 'dart:io';
-import 'package:flutter_movie/movie_list.dart';
 import 'package:flutter_movie/movies.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'movie_state.dart';
 
 class NewMovie extends StatefulWidget {
   @override
@@ -51,6 +53,8 @@ class _NewMovieState extends State<NewMovie> {
 
   @override
   Widget build(BuildContext context) {
+    // final movieState = Provider.of<MovieState>(context);
+
     final imageButton = InkWell(
       onTap: () => getImage(),
       child: Container(
@@ -123,75 +127,78 @@ class _NewMovieState extends State<NewMovie> {
       ),
     );
 
-    final addButton = Material(
-      elevation: 5.0,
-      borderRadius: BorderRadius.circular(30.0),
-      color: Color(0xff192376),
-      child: MaterialButton(
-        minWidth: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        elevation: 50.0,
-        onPressed: () {
-          if (_formKey.currentState.validate()) {
-            movieState.addMovie(movie);
-            Navigator.of(context).pop();
-          }
-        },
-        child: Text('Adicionar novo filme',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontFamily: 'Montserrat', fontSize: 20.0)
-                .copyWith(color: Colors.white, fontWeight: FontWeight.bold)),
-      ),
-    );
-
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        elevation: 0.3,
-        centerTitle: true,
-        title: Text(
-          'Novo filme',
-          style: new TextStyle(
-              color: Colors.red,
-              fontFamily: 'Arvo',
-              fontWeight: FontWeight.bold),
+    return Consumer<MovieState>(
+      builder: (context, movieState, _) => Scaffold(
+        backgroundColor: Colors.black,
+        appBar: AppBar(
+          elevation: 0.3,
+          centerTitle: true,
+          title: Text(
+            'Novo filme',
+            style: new TextStyle(
+                color: Colors.red,
+                fontFamily: 'Arvo',
+                fontWeight: FontWeight.bold),
+          ),
+          backgroundColor: Colors.black87,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            color: Colors.red,
+            onPressed: () => Navigator.of(context).pop(),
+          ),
         ),
-        backgroundColor: Colors.black87,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          color: Colors.red,
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Form(
-          key: _formKey,
-          child: Padding(
-            padding: EdgeInsets.all(20),
-            child: Column(
-              children: <Widget>[
-                imageButton,
-                SizedBox(
-                  height: 25.0,
-                ),
-                movieNameField,
-                SizedBox(
-                  height: 25.0,
-                ),
-                movieYearField,
-                SizedBox(
-                  height: 25.0,
-                ),
-                movieScoreField,
-                SizedBox(
-                  height: 25.0,
-                ),
-                movieDescriptionField,
-                SizedBox(
-                  height: 25.0,
-                ),
-                addButton,
-              ],
+        body: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Padding(
+              padding: EdgeInsets.all(20),
+              child: Column(
+                children: <Widget>[
+                  imageButton,
+                  SizedBox(
+                    height: 25.0,
+                  ),
+                  movieNameField,
+                  SizedBox(
+                    height: 25.0,
+                  ),
+                  movieYearField,
+                  SizedBox(
+                    height: 25.0,
+                  ),
+                  movieScoreField,
+                  SizedBox(
+                    height: 25.0,
+                  ),
+                  movieDescriptionField,
+                  SizedBox(
+                    height: 25.0,
+                  ),
+                  Material(
+                    elevation: 5.0,
+                    borderRadius: BorderRadius.circular(30.0),
+                    color: Color(0xff192376),
+                    child: MaterialButton(
+                      minWidth: MediaQuery.of(context).size.width,
+                      padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                      elevation: 50.0,
+                      onPressed: () {
+                        if (_formKey.currentState.validate()) {
+                          movieState.movies.add(movie);
+                          Navigator.of(context).pop();
+                        }
+                      },
+                      child: Text('Adicionar novo filme',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                                  fontFamily: 'Montserrat', fontSize: 20.0)
+                              .copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold)),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
