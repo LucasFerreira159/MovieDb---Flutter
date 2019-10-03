@@ -41,10 +41,12 @@ class _NewMovieState extends State<NewMovie> {
   Future getImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
 
-    setState(() {
-      _image = image;
-      movie.posterPath = _image.path;
-    });
+    if (image != null) {
+      setState(() {
+        _image = image;
+        movie.posterPath = _image.path;
+      });
+    }
   }
 
   @override
@@ -55,11 +57,7 @@ class _NewMovieState extends State<NewMovie> {
         width: 150,
         height: 250,
         child: _image == null
-            ? Icon(
-                Icons.camera_alt,
-                size: 50,
-                color: Colors.white,
-              )
+            ? Image.asset('lib/assets/add_icon.png')
             : Image.file(
                 _image,
                 fit: BoxFit.fill,
