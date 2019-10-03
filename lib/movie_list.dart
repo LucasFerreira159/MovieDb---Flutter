@@ -6,18 +6,28 @@ import 'movie_cell.dart';
 import 'movie_title.dart';
 import 'movies.dart';
 
+_MovieListState movieState;
+
 class MovieList extends StatefulWidget {
   @override
-  _MovieListState createState() => _MovieListState();
+  _MovieListState createState() {
+    movieState = _MovieListState();
+    return movieState;
+  }
 }
 
 class _MovieListState extends State<MovieList> {
-  List<Movie> movies;
+  List<Movie> movies = List();
   Color mainColor = Colors.red;
+
+  void addMovie(Movie movie) {
+    setState(() {
+      movies.add(movie);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    getData();
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: new AppBar(
@@ -50,7 +60,7 @@ class _MovieListState extends State<MovieList> {
             MovieTitle(Colors.white),
             Expanded(
                 child: new ListView.builder(
-                  physics: BouncingScrollPhysics(),
+              physics: BouncingScrollPhysics(),
               itemCount: movies == null ? 0 : movies.length,
               itemBuilder: (context, i) {
                 return FlatButton(

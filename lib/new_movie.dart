@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:flutter_movie/movie_list.dart';
+import 'package:flutter_movie/movies.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 
@@ -13,36 +15,57 @@ class _NewMovieState extends State<NewMovie> {
   final _movieYearController = TextEditingController();
   final _movieScoreController = TextEditingController();
   final _movieDescriptionController = TextEditingController();
+  DateTime selectedDate = DateTime.now();
+
+  Movie movie = Movie();
+  File _image;
+
+  Future<Null> _selectDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != selectedDate)
+      setState(() {
+        selectedDate = picked;
+        _movieYearController.text = selectedDate.day.toString() +
+            "/" +
+            selectedDate.month.toString() +
+            "/" +
+            selectedDate.year.toString();
+        movie.releaseDate = selectedDate;
+      });
+  }
+
+  Future getImage() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      _image = image;
+      movie.posterPath = _image.path;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    File _image;
-
-    Future getImage() async {
-        var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-
-        setState(() {
-          _image = image;
-        });
-    }
-
     final imageButton = InkWell(
-        onTap: () => getImage(),
+      onTap: () => getImage(),
+      child: Container(
+        width: 150,
+        height: 250,
         child: _image == null
             ? Icon(
                 Icons.camera_alt,
                 size: 50,
                 color: Colors.white,
               )
-            : Container(
-              width: 100,
-              height: 120,
-              child: Image.file(
+            : Image.file(
                 _image,
                 fit: BoxFit.fill,
               ),
-            ),
-      );
+      ),
+    );
 
     final movieNameField = TextFormField(
       controller: _movieNameController,
@@ -52,6 +75,9 @@ class _NewMovieState extends State<NewMovie> {
         }
 
         return null;
+      },
+      onChanged: (value) {
+        movie.title = value;
       },
       decoration: InputDecoration(
           fillColor: Colors.white,
@@ -75,11 +101,12 @@ class _NewMovieState extends State<NewMovie> {
     final movieYearField = TextFormField(
       controller: _movieYearController,
       keyboardType: TextInputType.number,
+      onTap: () => _selectDate(context),
       decoration: InputDecoration(
           fillColor: Colors.white,
           filled: true,
           contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-          hintText: 'Ano',
+          hintText: 'Ano de Lançamento',
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0))),
     );
 
@@ -87,6 +114,7 @@ class _NewMovieState extends State<NewMovie> {
       controller: _movieDescriptionController,
       keyboardType: TextInputType.multiline,
       maxLines: 10,
+      onChanged: (value) => movie.overview = value,
       decoration: InputDecoration(
         fillColor: Colors.white,
         filled: true,
@@ -107,7 +135,8 @@ class _NewMovieState extends State<NewMovie> {
         elevation: 50.0,
         onPressed: () {
           if (_formKey.currentState.validate()) {
-            // Add to list
+            movieState.addMovie(movie);
+            Navigator.of(context).pop();
           }
         },
         child: Text('Adicionar novo filme',

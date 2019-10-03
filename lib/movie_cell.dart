@@ -29,6 +29,7 @@ class MovieCell extends StatelessWidget {
                     color: Colors.grey,
                     image: DecorationImage(
                         image: NetworkImage(img_url + movies[i].posterPath),
+                        // image: AssetImage(movies[i].posterPath),
                         fit: BoxFit.cover),
                     /*boxShadow: [
                       new BoxShadow(
